@@ -1,0 +1,140 @@
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>锅打灰太狼</title>
+	<style type="text/css">
+	    .public{
+	    	width: 320px;
+        	height: 480px;
+        	margin: 0 auto;
+        	position: relative;
+	    }
+	    #start{
+
+	    }
+        
+        #begin{
+        	position: absolute;
+        	top: 180px;
+        	left: 60px;
+        	font-size:50px;
+        	text-align: center;
+        	line-height: 50px;
+        }
+        #game{
+        	display: none;
+        	position: relative;
+        }
+        #score{
+        	position: absolute;
+        	top: 14px;
+        	left: 60px;
+        	color: skyblue;
+        	font-weight: bold;
+        }
+        #progress{
+        	position: absolute;
+        	top: 66px;
+        	left: 63px;
+        }
+        .bigImg{
+            position: absolute;
+        }
+	</style>
+	<script type="text/javascript">
+        window.onload=function(){
+        	var begin=document.getElementById("begin");
+        	var game=document.getElementById("game");
+        	var start=document.getElementById("start");
+            var sco=document.getElementById("score")
+        	begin.onclick=function(){
+                start.style.display="none";
+                game.style.display="block";
+                progressSum();
+        	}
+            function progressSum(){
+                var progress=document.getElementById("progress");
+                var pro_width=progress.offsetWidth;
+                console.log(pro_width);
+                var setInter=setInterval(function(){
+                    pro_width=pro_width-1;
+                    console.log(pro_width);
+                    progress.style.width=pro_width+"px";
+                    if(pro_width<=0){
+                        clearInterval(setInter);
+                        clearInterval(createImg);
+                    };
+                },100);
+            }
+            var wolfImg=["img/h0.png","img/h1.png","img/h2.png","img/h3.png","img/h4.png","img/h5.png","img/h4.png","img/h3.png","img/h2.png","img/h1.png","img/h0.png"];
+            var cave = [{l:"98px",t:"115px"},{l:"17px",t:"160px"},{l:"15px",t:"220px"},{l:"30px",t:"293px"},{l:"122px",t:"273px"},
+                {l:"207px",t:"295px"},{l:"200px",t:"211px"},{l:"187px",t:"141px"},{l:"100px",t:"185px"}];
+            var hitWfArry=['img/h6.png','img/h7.png','img/h8.png','img/h9.png']; 
+            var wfImg=document.createElement("img");
+            var sco=0;
+            var ran_number;
+            var createImg=setInterval(function(){
+                game.appendChild(wfImg);
+               ran_number=parseInt(Math.random()*9);
+               wfImg.className="bigImg";
+               wfImg.style.left=cave[ran_number].l;
+               wfImg.style.top=cave[ran_number].t;
+               var isFirstClick=true;
+               wfImg.onclick=function(){
+                if (isFirstClick) {
+                   sco+=10;
+                   score.innerHTML=sco;
+                   isFirstClick=false;
+                   hitChangeImg(this);
+                   }else{
+                    return false;
+                   };
+               }
+               changImg();
+            },1000);
+            function hitChangeImg(img){
+                clearInterval(changImgInter);
+                var j=-1;
+                var changeHitImg=setInterval(function(){
+                    j++;
+                    if (j>=3) {
+                        clearInterval(changeHitImg);
+                        game.removeChild(img);
+                    };
+                    img.src=hitWfArry[j];
+                },88)
+            };
+            var i=0;
+            var changImgInter;
+            function changImg(){
+                changImgInter=setInterval(function(){
+                    wfImg.src=wolfImg[i];
+                    i++;
+                    if (i>10) {
+                        i=0;
+                        game.removeChild(wfImg);
+                        clearInterval(changImgInter);
+                    };
+                },88);
+            }
+        }
+	</script>
+</head>
+<body>
+	<!-- 第一个页面 -->
+    <div id="start" class="public">
+        <!-- 背景图 -->
+    	<img src="img/myrank_bg.jpg">
+    	<span id="begin">开始游戏</span>
+    </div>
+	<!-- 第二个页面 -->
+	<div id="game" class="public">
+	    <!-- 计分 -->
+		<span id="score">0</span>
+		<!-- 进度条 -->
+		<img src="img/progress.png" height="16" width="180" id="progress">
+		<!-- 背景图 -->
+		<img src="img/game_bg.jpg" width="320" height="480">
+	</div>
+</body>
+</html>

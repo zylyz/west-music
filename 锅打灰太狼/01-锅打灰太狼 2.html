@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>锅打灰太狼</title>
+	<style type="text/css">
+	.public{
+		width: 320px;
+		height: 480px;
+		margin: 0 auto;
+		position: relative;
+	}
+	#begin {
+		position: absolute;
+		top: 180px;
+		left: 60px;
+		font-size: 50px;
+		text-align: center;
+		line-height: 50px;
+	}
+	#game {
+		display: none;
+	}
+	#score {
+		position: absolute;
+		top: 12px;
+		left: 60px;
+		color: red;
+		font-size: 25px;
+	}
+	#progress {
+		position: absolute;
+		top: 66px;
+		left: 63.5px;
+	}
+     .bigImg {
+     	position: absolute;
+     }
+	</style>
+	<script type="text/javascript">
+     window.onload = function  () {
+     	var begin = document.getElementById('begin');
+     	var game = document.getElementById('game');
+      var start = document.getElementById('start');
+    
+      var score = document.getElementById('score');
+
+     	begin.onclick = function (){
+            game.style.display = "block";
+            start.style.display = "none"; 
+            progreesSum();
+     	}
+       function progreesSum (){
+       	var progress = document.getElementById('progress');
+       	var pro_width = progress.offsetWidth;
+            var setInter = setInterval(function(){
+                  pro_width = pro_width - 10;
+                   console.log(pro_width); 
+                   progress.style.width = pro_width+"px";
+                   if (pro_width<=0) {
+                   	clearInterval(setInter);
+                   };
+             },1000);
+      
+
+       var wolfImg = ["img/h0.png","img/h1.png","img/h2.png","img/h3.png","img/h4.png","img/h5.png","img/h4.png","img/h3.png","img/h2.png","img/h1.png","img/h0.png"];
+       var cave = [{l:"98px",t:"115px"},{l:"17px",t:"160px"},{l:"15px",t:"220px"},{l:"30px",t:"293px"},{l:"122px",t:"273px"},
+		{l:"207px",t:"295px"},{l:"200px",t:"211px"},{l:"187px",t:"141px"},{l:"100px",t:"185px"}];
+
+// 大灰狼被击打动态图
+    var hImgArr2 = ['img/h6.png','img/h7.png','img/h8.png','img/h9.png'];
+      
+      var ran_numer;
+       var sco = 0;
+      setInterval (function(){
+        var wfImg =  document.createElement("img");
+      game.appendChild(wfImg);
+       ran_numer = parseInt(Math.random()*9);
+
+       wfImg.className = "bigImg";
+       wfImg.style.left = cave[ran_numer].l;
+       wfImg.style.top = cave[ran_numer].t;
+       changImg(wfImg);
+       var isClick = true;
+       wfImg.onclick = function (){
+         
+         if (isClick) {
+          sco+=10;
+        score.innerHTML = sco;
+         hitChangImg(this);
+         isClick = false;
+         }else{
+          return false;
+         }
+       }
+
+      
+
+      },2000);
+      
+       function hitChangImg(img){
+        clearInterval(changImgInter);
+      var a = -1;
+      var hitChangImg1 = setInterval (function(){
+        a++;
+      
+         if (a>=3) {
+          game.removeChild(img);
+          clearInterval(hitChangImg1);
+         };
+          img.src = hImgArr2[a];
+      },200);
+
+
+       }
+
+
+var changImgInter;
+        function changImg(wfImg){
+          var i=0;
+      changImgInter = setInterval(function(){
+
+        	console.log("======="+i);
+        		wfImg.src = wolfImg[i];
+        		i++;
+        		if (i>=10) {
+             console.log(i);
+        			game.removeChild(wfImg);
+                clearInterval(changImgInter);
+        		};
+        	},150);
+        }
+    }
+  }
+	</script>
+</head>
+<body>
+<!-- 第一个页面 -->
+<div id="start" class="public">
+<!-- 背景图 -->
+	<img src="img/myrank_bg.jpg" height="480" width="320">
+	<span id="begin">开始游戏</span>
+</div>
+
+<!-- 第二个页面 -->
+<div id="game" class="public">
+    <!-- 计分 -->
+	<span id="score">0</span>
+	<!-- 进度条 -->
+	<img src="img/progress.png" height="16" width="180" id="progress">
+	<!-- 背景图 -->
+	<img src="img/game_bg.jpg" height="480" width="320">
+</div>
+</body>
+</html>
